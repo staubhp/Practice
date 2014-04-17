@@ -15,6 +15,7 @@ namespace TakeHomeQ1
 
             //solve Part 1
             mySolver.solvePart1();
+            mySolver.solvePart2();
         }        
     }    
 

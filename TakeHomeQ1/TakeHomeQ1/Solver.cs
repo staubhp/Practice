@@ -89,6 +89,55 @@ namespace TakeHomeQ1
             Console.WriteLine("Press Enter to continue.");
             Console.ReadLine();
         }
+
+        public void solvePart2()
+        {
+            SinglyLinkedList myList = new SinglyLinkedList();
+
+            Console.WriteLine("Take Home Question 1, Part 2");
+            Console.WriteLine("Given a singly linked list of integers, get the fifth element from the end in one pass.");
+            Console.WriteLine("Enter a list of integers separated by commas (e.g., 4,2,10,6):");
+            string userInputString = Console.ReadLine();
+
+            //split the input into an array and build the list 
+            bool success = true;
+            do
+            {
+                success = true;
+                string[] myUserInputs = userInputString.Split(',');
+                foreach (var myUserInput in myUserInputs)
+                {
+                    int k = -1;
+                    if (!int.TryParse(myUserInput.Trim(), out k))
+                    {
+                        success = false;
+                        Console.WriteLine("Invalid input.");
+                        Console.WriteLine("Enter a list of integers separated by commas (e.g. 4,2,10,6):");
+                        userInputString = Console.ReadLine();
+                        break;
+                    }
+                    else
+                    {
+                        myList.Add(k);
+                    }
+                }
+            } while (success == false);
+
+            
+            //Now for some assumptions about this problem statement:
+            //1) Must get 5th element from last in one pass. I define a pass to be a full loop through whole list, meaning I'm not violating the problem by using myList.Get(5)
+            //2) 5th element from last: does it include that fifth element, or is it literally 5 elements BEFORE the last one. I assume it includes the last
+            var myCurrentNode = myList.headNode;
+            var myLookAheadNode = myList.GetNode(5);
+            if (myLookAheadNode == null) { Console.WriteLine("Error: The list does not contain at least 5 elements."); Console.ReadLine(); }
+            while (true) //have to use infinite loop b/c problem states we can't use list's length
+            {
+                if (myLookAheadNode == null) { break; }
+                myCurrentNode = myCurrentNode.Next;
+                
+
+            }
+        }
     }
 
     [TestFixture]
@@ -96,12 +145,12 @@ namespace TakeHomeQ1
     {
         [Test]
         public void Test_GetTriangleType()
-            {
+        {
             //The Solver will not allow illegal inputs and will not compute the triangle type until it has 3 integers
             //This is why we don't need to test for anything except proper output
-                Assert.AreEqual(Solver.triangleType.equilateral, Solver.getTriangleType(1, 1, 1), "getTriangleType(1,1,1) did not return equilateral");
-                Assert.AreEqual(Solver.triangleType.isoceles , Solver.getTriangleType(0, 1, 1), "getTriangleType(0,1,1) did not return isoceles");
-                Assert.AreEqual(Solver.triangleType.scalene, Solver.getTriangleType(0, 1, 2), "getTriangleType(0,1,2) did not return scalene");               
-            }
+            Assert.AreEqual(Solver.triangleType.equilateral, Solver.getTriangleType(1, 1, 1), "getTriangleType(1,1,1) did not return equilateral");
+            Assert.AreEqual(Solver.triangleType.isoceles, Solver.getTriangleType(0, 1, 1), "getTriangleType(0,1,1) did not return isoceles");
+            Assert.AreEqual(Solver.triangleType.scalene, Solver.getTriangleType(0, 1, 2), "getTriangleType(0,1,2) did not return scalene");
+        }
     }
 }

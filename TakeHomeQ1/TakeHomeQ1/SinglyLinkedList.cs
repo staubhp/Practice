@@ -11,8 +11,9 @@ namespace TakeHomeQ1
     /// </summary>
     class SinglyLinkedList
     {
-        Node headNode;
-        Node currentNode;
+        public Node headNode; //normally these nodes would be encapsulated, but they need to be exposed for Part 2 to use for traversal
+        public Node currentNode;
+
         private int size = 0;
 
         public class Node
@@ -50,7 +51,7 @@ namespace TakeHomeQ1
             {
                 Node myNewNode = new Node();
                 myNewNode.NodeContent = content;
-                currentNode.Next = myNewNode;
+                currentNode.Next = null; //myNewNode;
                 currentNode = myNewNode;
                 size++;
                 return myNewNode;
@@ -73,6 +74,18 @@ namespace TakeHomeQ1
 
             return ret;
 
+        }
+
+        public Node GetNode(int position)
+        {                     
+            Node tempNode = headNode;
+
+            for (int i = 1; i <= position; i++)
+            {
+                tempNode = tempNode.Next;
+            }
+
+            return tempNode;
         }
 
         public bool Delete(int position)
