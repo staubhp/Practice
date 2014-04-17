@@ -37,26 +37,48 @@ namespace TakeHomeQ1
             return size;
         }
 
-        public Node Add(object content)
+        public void AddMany(object[] content)
         {
-            if (headNode == null)
+            foreach (var myObject in content)
             {
-                headNode = new Node();
-                headNode.NodeContent = content;
-                currentNode = headNode;
-                size++;
-                return headNode;
+                Add(myObject);
+            }
+        }
+
+        public Node Add(params object[] content)
+        {
+            if (content.Length > 1)
+            {
+                Node myLastNode = new Node();
+                foreach (var myContent in content)
+                {
+                    myLastNode = Add(myContent);
+                }
+                return myLastNode;
             }
             else
             {
-                Node myNewNode = new Node();
-                myNewNode.NodeContent = content;
-                currentNode.Next = null; //myNewNode;
-                currentNode = myNewNode;
-                size++;
-                return myNewNode;
-            }
+                if (headNode == null)
+                {
+                    headNode = new Node();
+                    headNode.NodeContent = content[0];
+                    currentNode = headNode;
+                    size++;
+                    return headNode;
+                }
+                else
+                {
+                    Node myNewNode = new Node();
+                    myNewNode.NodeContent = content[0];
+                    currentNode.Next = myNewNode;
+                    currentNode = myNewNode;
+                    size++;
+                    return myNewNode;
+                }
+            }            
         }
+
+  
 
         public object Get(int position)
         {
@@ -65,7 +87,7 @@ namespace TakeHomeQ1
 
             Node tempNode = headNode;
 
-            for (int i = 1; i <= position; i++)
+            for (int i = 1; i < position; i++)
             {
                 tempNode = tempNode.Next;
             }
@@ -80,9 +102,10 @@ namespace TakeHomeQ1
         {                     
             Node tempNode = headNode;
 
-            for (int i = 1; i <= position; i++)
+            for (int i = 1; i < position; i++)
             {
                 tempNode = tempNode.Next;
+                if (tempNode == null) { break; }
             }
 
             return tempNode;
