@@ -92,51 +92,65 @@ namespace TakeHomeQ1
 
         public void solvePart2()
         {
-            SinglyLinkedList myList = new SinglyLinkedList();
-
             Console.WriteLine("Take Home Question 1, Part 2");
             Console.WriteLine("Given a singly linked list of integers, get the fifth element from the end in one pass.");
+
+            SinglyLinkedList myList = getListFromUser();
+            int myNthElement = getNthElementFromEndOfList(myList, 5);
+
+            Console.WriteLine("The fifth element from the end of that list is: " + myNthElement.ToString());
+            Console.ReadLine();
+
+        }
+
+        public static SinglyLinkedList getListFromUser()
+        {
+            SinglyLinkedList myList = new SinglyLinkedList();
+
             Console.WriteLine("Enter a list of integers separated by commas (e.g., 4,2,10,6):");
             string userInputString = Console.ReadLine();
 
             //split the input into an array and build the list 
-            bool success = true;
-            do
+            string[] myUserInputs = userInputString.Split(',');
+            foreach (var myUserInput in myUserInputs)
             {
-                success = true;
-                string[] myUserInputs = userInputString.Split(',');
-                foreach (var myUserInput in myUserInputs)
+                int k = -1;
+                if (!int.TryParse(myUserInput.Trim(), out k))
                 {
-                    int k = -1;
-                    if (!int.TryParse(myUserInput.Trim(), out k))
-                    {
-                        success = false;
-                        Console.WriteLine("Invalid input.");
-                        Console.WriteLine("Enter a list of integers separated by commas (e.g. 4,2,10,6):");
-                        userInputString = Console.ReadLine();
-                        break;
-                    }
-                    else
-                    {
-                        myList.Add(k);
-                    }
+                    Console.WriteLine("Error: Invalid input");
+                    return getListFromUser();               
                 }
-            } while (success == false);
+                else
+                {
+                    myList.Add(k);
+                }
+            }
 
-            
+            return myList;
+        }
+
+        public static int getNthElementFromEndOfList(SinglyLinkedList myList, int n)
+        {
             //Now for some assumptions about this problem statement:
-            //1) Must get 5th element from last in one pass. I define a pass to be a full loop through whole list, meaning I'm not violating the problem by using myList.Get(5)
+            //1) Must get 5th element from last in one pass. I define a pass to be a full loop through whole list, meaning I'm not violating the problem by using myList.GetNode(5)
             //2) 5th element from last: does it include that fifth element, or is it literally 5 elements BEFORE the last one. I assume it includes the last
             var myCurrentNode = myList.headNode;
-            var myLookAheadNode = myList.GetNode(5);
-            if (myLookAheadNode == null) { Console.WriteLine("Error: The list does not contain at least 5 elements."); Console.ReadLine(); }
+            var myLookAheadNode = myList.GetNode(n);
+            if (myLookAheadNode == null)
+            {
+                Console.WriteLine("Error: The list does not contain at least " + n.ToString() + " elements.");
+                myList = getListFromUser();
+                return getNthElementFromEndOfList(myList, n);
+            }
             while (true) //have to use infinite loop b/c problem states we can't use list's length
             {
-                if (myLookAheadNode == null) { break; }
+                if (myLookAheadNode.Next == null) { break; }
                 myCurrentNode = myCurrentNode.Next;
-                
-
+                myLookAheadNode = myLookAheadNode.Next;
             }
+
+            return (int)myCurrentNode.NodeContent; //I'd normally put sturdier parsing here, but this will work for the small scope of this exercise
+
         }
     }
 
@@ -144,13 +158,34 @@ namespace TakeHomeQ1
     public class Part1Tests
     {
         [Test]
-        public void Test_GetTriangleType()
+        public void Test_getTriangleType()
         {
             //The Solver will not allow illegal inputs and will not compute the triangle type until it has 3 integers
-            //This is why we don't need to test for anything except proper output
+            //I could test the portion that takes in and validates user input, but because of its simplicity I will only test the result producing method
             Assert.AreEqual(Solver.triangleType.equilateral, Solver.getTriangleType(1, 1, 1), "getTriangleType(1,1,1) did not return equilateral");
             Assert.AreEqual(Solver.triangleType.isoceles, Solver.getTriangleType(0, 1, 1), "getTriangleType(0,1,1) did not return isoceles");
             Assert.AreEqual(Solver.triangleType.scalene, Solver.getTriangleType(0, 1, 2), "getTriangleType(0,1,2) did not return scalene");
+        }
+
+        [Test]
+        public void Test_NthElementOfList()
+        {
+            //Just as with Part 1, the program will not allow invalid inputs or inputs < n
+            //I could make additional tests for the part that receives and validates the user input, but in the scope of this exercise I'm just testing the result producing method            
+            SinglyLinkedList myList1 = new SinglyLinkedList();            
+            myList1.Add(1, 2, 3, 4, 5);
+            int myResult1 = 1;
+            Assert.AreEqual(Solver.getNthElementFromEndOfList(myList1, 5), myResult1, "getNthElementFromList() output was wrong");
+
+            SinglyLinkedList myList2 = new SinglyLinkedList();
+            myList2.Add(400,123,433,9,24,69,44,39,5,0,1);
+            int myResult2 = 44;
+            Assert.AreEqual(Solver.getNthElementFromEndOfList(myList2, 5), myResult2, "getNthElementFromList() output was wrong");
+
+            SinglyLinkedList myList3 = new SinglyLinkedList();
+            myList3.Add(50, 40, 30, 20, 10);
+            int myResult3 = 50;
+            Assert.AreEqual(Solver.getNthElementFromEndOfList(myList3, 5), myResult3, "getNthElementFromList() output was wrong");
         }
     }
 }
