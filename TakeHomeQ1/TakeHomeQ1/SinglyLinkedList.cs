@@ -37,13 +37,7 @@ namespace TakeHomeQ1
             return size;
         }
 
-        public void AddMany(object[] content)
-        {
-            foreach (var myObject in content)
-            {
-                Add(myObject);
-            }
-        }
+    
 
         public Node Add(params object[] content)
         {
