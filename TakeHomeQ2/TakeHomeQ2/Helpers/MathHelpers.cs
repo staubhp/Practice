@@ -39,7 +39,7 @@ namespace TakeHomeQ2.Helpers
             if (max <= 1) { return myPrimeNumbers; }
 
             //create a bit array from 2 to max
-            BitArray ba = new BitArray(max + 1, true);
+            BitArray ba = new BitArray(max+1 , true);
 
             //0 and 1 aren't prime, so mark them as false
             ba[0] = false;
