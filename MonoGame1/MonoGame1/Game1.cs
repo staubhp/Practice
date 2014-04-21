@@ -19,11 +19,13 @@ namespace MonoGame1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        private Texture2D background;
-        private Texture2D shuttle;
+        private Texture2D background;        
         private AnimatedSprite animatedSprite;
-        int shuttleX = 400;
-        int shuttleY = 400;
+        GameObject topWall;
+        GameObject bottomWall;
+        GameObject shuttle;
+
+        LevelLoader level;
 
         public Game1()
             : base()
@@ -53,13 +55,20 @@ namespace MonoGame1
         {            
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            
+            //background = Content.Load<Texture2D>("stars");
 
-            Texture2D image = Content.Load<Texture2D>("link-zelda-16-bit");
-            background = Content.Load<Texture2D>("stars");
-            shuttle = Content.Load<Texture2D>("shuttle");
-
+            level = new LevelLoader("../../../Levels/Level.xml", this.Content);            
+            
             Texture2D animatedSpriteTexture = Content.Load<Texture2D>("SmileyWalk");
-            animatedSprite = new AnimatedSprite(animatedSpriteTexture, 4, 4);            
+            animatedSprite = new AnimatedSprite(animatedSpriteTexture, 4, 4);
+
+            Texture2D wallTexture = Content.Load<Texture2D>("Wall");
+            topWall = new GameObject (wallTexture, Vector2.Zero );
+            bottomWall = new GameObject (wallTexture, new Vector2(0, Window.ClientBounds.Height - wallTexture.Height ));
+
+            Texture2D shuttleTexture = Content.Load<Texture2D>("Shuttle");
+            shuttle = new GameObject(shuttleTexture, new Vector2(100, 100));
         }
 
         /// <summary>
@@ -86,25 +95,32 @@ namespace MonoGame1
             #region Movement
             KeyboardState state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.Left))
-            {
-                shuttleX -= 5;
+            {                
+                shuttle.Position.X -= 5;
             }
             if (state.IsKeyDown(Keys.Right))
             {
-                shuttleX += 5;
+                shuttle.Position.X += 5;
             }
             if (state.IsKeyDown(Keys.Down))
             {
-                shuttleY += 5;
+                shuttle.Position.Y += 5;
             }
             if (state.IsKeyDown(Keys.Up))
             {
-                shuttleY -= 5;
+                shuttle.Position.Y -= 5;
+            }          
+            #endregion
+
+            #region Crude Collision Detection
+            if (shuttle.BoundingBox.Intersects(topWall.BoundingBox))
+            {
+                shuttle.Position.Y = topWall.BoundingBox.Bottom;
             }
-            shuttleX = (shuttleX < 0 ? 0 : shuttleX);
-            shuttleX = (shuttleX > 800 ? 800 : shuttleX);
-            shuttleY = (shuttleY < 0 ? 0 : shuttleY);
-            shuttleY = (shuttleY > 480 ? 480 : shuttleY);
+            if (shuttle.BoundingBox.Intersects(bottomWall.BoundingBox))
+            {
+                shuttle.Position.Y = bottomWall.BoundingBox.Y - shuttle.BoundingBox.Height;
+            }
             #endregion
 
             base.Update(gameTime);
@@ -120,10 +136,16 @@ namespace MonoGame1
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
-            spriteBatch.Draw(shuttle, new Vector2(shuttleX ,shuttleY ), Color.White);
+            //spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);            
+
+            level.Draw(spriteBatch);
 
             animatedSprite.Draw(spriteBatch, new Vector2(50, 50));
+
+            topWall.Draw(spriteBatch);
+            bottomWall.Draw(spriteBatch);
+
+            shuttle.Draw(spriteBatch);
 
             spriteBatch.End();
 
