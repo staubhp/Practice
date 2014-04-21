@@ -10,7 +10,7 @@ namespace MonoGame1
 {
     public class GameObject
     {
-        Texture2D texture;
+        public Texture2D texture;
         public Vector2 Position;
         public Vector2 Velocity;
 
@@ -32,14 +32,7 @@ namespace MonoGame1
             this.Position = position;
         }
 
-        public GameObject(Texture2D texture, Vector2 position, Vector2 velocity)
-        {
-            this.texture = texture;
-            this.Position = position;
-            this.Velocity = velocity;
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Position, Color.White);
         }

@@ -20,10 +20,9 @@ namespace MonoGame1
         SpriteBatch spriteBatch;
 
         private Texture2D background;        
-        private AnimatedSprite animatedSprite;
+        private AnimatedGameObject  player;
         GameObject topWall;
-        GameObject bottomWall;
-        GameObject shuttle;
+        GameObject bottomWall;        
 
         LevelLoader level;
 
@@ -56,19 +55,18 @@ namespace MonoGame1
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
-            //background = Content.Load<Texture2D>("stars");
+            background = Content.Load<Texture2D>("stars");
 
-            level = new LevelLoader("../../../Levels/Level.xml", this.Content);            
+            level = new LevelLoader("./Levels/Level.xml", this.Content);            
             
             Texture2D animatedSpriteTexture = Content.Load<Texture2D>("SmileyWalk");
-            animatedSprite = new AnimatedSprite(animatedSpriteTexture, 4, 4);
-
+            player = new AnimatedGameObject(animatedSpriteTexture, 4, 4, new Vector2(50, 50));            
             Texture2D wallTexture = Content.Load<Texture2D>("Wall");
             topWall = new GameObject (wallTexture, Vector2.Zero );
             bottomWall = new GameObject (wallTexture, new Vector2(0, Window.ClientBounds.Height - wallTexture.Height ));
 
-            Texture2D shuttleTexture = Content.Load<Texture2D>("Shuttle");
-            shuttle = new GameObject(shuttleTexture, new Vector2(100, 100));
+            //Texture2D shuttleTexture = Content.Load<Texture2D>("Shuttle");
+            //shuttle = new GameObject(shuttleTexture, new Vector2(100, 100));
         }
 
         /// <summary>
@@ -90,36 +88,48 @@ namespace MonoGame1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            animatedSprite.Update();
 
-            #region Movement
             KeyboardState state = Keyboard.GetState();
+            #region Movement            
+            bool playerIsMoving = false;
             if (state.IsKeyDown(Keys.Left))
-            {                
-                shuttle.Position.X -= 5;
+            {
+                player.Position.X -= 5;
+                playerIsMoving = true;
             }
             if (state.IsKeyDown(Keys.Right))
             {
-                shuttle.Position.X += 5;
+                player.Position.X += 5;
+                playerIsMoving = true;
             }
             if (state.IsKeyDown(Keys.Down))
             {
-                shuttle.Position.Y += 5;
+                player.Position.Y += 5;
+                playerIsMoving = true;
             }
             if (state.IsKeyDown(Keys.Up))
             {
-                shuttle.Position.Y -= 5;
-            }          
+                player.Position.Y -= 5;
+                playerIsMoving = true;
+            }
+            if (playerIsMoving) { player.Update(); }
+            #endregion
+            #region Shooting
+            if (state.IsKeyDown(Keys.Space))
+            {
+                //player.weapon.fire;
+
+            }
             #endregion
 
             #region Crude Collision Detection
-            if (shuttle.BoundingBox.Intersects(topWall.BoundingBox))
+            if (player.BoundingBox.Intersects(topWall.BoundingBox))
             {
-                shuttle.Position.Y = topWall.BoundingBox.Bottom;
+                player.Position.Y = topWall.BoundingBox.Bottom;
             }
-            if (shuttle.BoundingBox.Intersects(bottomWall.BoundingBox))
+            if (player.BoundingBox.Intersects(bottomWall.BoundingBox))
             {
-                shuttle.Position.Y = bottomWall.BoundingBox.Y - shuttle.BoundingBox.Height;
+                player.Position.Y = bottomWall.BoundingBox.Y - player.BoundingBox.Height;
             }
             #endregion
 
@@ -136,16 +146,15 @@ namespace MonoGame1
 
             spriteBatch.Begin();
 
-            //spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);            
+            spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);            
 
             level.Draw(spriteBatch);
 
-            animatedSprite.Draw(spriteBatch, new Vector2(50, 50));
+            player.Draw(spriteBatch);
 
             topWall.Draw(spriteBatch);
             bottomWall.Draw(spriteBatch);
-
-            shuttle.Draw(spriteBatch);
+            
 
             spriteBatch.End();
 
