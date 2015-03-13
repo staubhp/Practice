@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +11,7 @@ namespace dijkstra
 {
     class Program
     {
+        private delegate void dist(Tuple<Node, int> n);
         static void Main(string[] args)
         {
             var myGraph = new Graph();
@@ -24,33 +27,34 @@ namespace dijkstra
             List<Node> visitedNodes = new List<Node>();
 
             //1) Assign to every node a tentative distance value: set it to zero for our initial node and to infinity for all other nodes.
-            graph.nodes.ToList().ForEach(x => nodeDistances.Add(x,int.MaxValue));
+            graph.nodes.ToList().ForEach(x => nodeDistances.Add(x, int.MaxValue));
             nodeDistances[sourceNode] = 0;
 
             //2) Set the initial node as current. Mark all other nodes unvisited. Create a set of all the unvisited nodes called the unvisited set.
             visitedNodes.Add(sourceNode);
 
             djikstra(sourceNode, targetNode, nodeDistances, visitedNodes);
-           
+
             return nodeDistances[targetNode];
         }
 
-        private static void djikstra(Node currentNode, Node targetNode, Dictionary<Node,int> nodeDistances, List<Node> visitedNodes )
+        private static void djikstra(Node currentNode, Node targetNode, Dictionary<Node, int> nodeDistances, List<Node> visitedNodes)
         {
             //3) For the current node, consider all of its unvisited neighbors and calculate their tentative distances. Compare the newly 
             //   calculated tentative distance to the current assigned value and assign the smaller one. For example, if the current node A is 
             //   marked with a distance of 6, and the edge connecting it with a neighbor B has length 2, then the distance to B (through A) 
             //   will be 6 + 2 = 8. If B was previously marked with a distance greater than 8 then change it to 8. Otherwise, keep the current value.            
-            foreach (var neighborNode in currentNode.neighbors)
+            dist myDist = n =>
             {
-                if (visitedNodes.FirstOrDefault(x => x.id == neighborNode.Item1.id) == null)
+                if (visitedNodes.FirstOrDefault(x => x.id == n.Item1.id) == null)
                 {
-                    int currentDistance = nodeDistances[neighborNode.Item1];
-                    int tentativeDistance = nodeDistances[currentNode] + neighborNode.Item2;
-                    if (tentativeDistance < currentDistance )
-                        nodeDistances[neighborNode.Item1] = tentativeDistance;
+                    int currentDistance = nodeDistances[n.Item1];
+                    int tentativeDistance = nodeDistances[currentNode] + n.Item2;
+                    if (tentativeDistance < currentDistance)
+                        nodeDistances[n.Item1] = tentativeDistance;
                 }
-            }
+            };
+            currentNode.neighbors.ToList().ForEach(n => myDist(n));
 
             //4) When we are done considering all of the neighbors of the current node, mark the current node as visited and remove 
             //   it from the unvisited set. A visited node will never be checked again.
@@ -63,20 +67,12 @@ namespace dijkstra
                 return;
 
             //6) Select the unvisited node that is marked with the smallest tentative distance, and set it as the new "current node" then go back to step 3.
-            var shortestNode = new Node(-1);
-            int shortest = int.MaxValue;
-            foreach (var neighborNode in currentNode.neighbors)
-            {
-                if (visitedNodes.FirstOrDefault(x => x.id == neighborNode.Item1.id) == null && nodeDistances[neighborNode.Item1] < shortest)
-                {
-                    shortest = nodeDistances[neighborNode.Item1];
-                    shortestNode = neighborNode.Item1;
-                }
-            }
-            djikstra(shortestNode, targetNode, nodeDistances, visitedNodes);
+            var next = nodeDistances.OrderBy(x => x.Value).First(y => currentNode.neighbors.Select(n => n.Item1).Except(visitedNodes).Contains(y.Key)).Key;
+                      
+            djikstra(next, targetNode, nodeDistances, visitedNodes);
         }
 
-    
+
     }
 
     class Node
@@ -118,16 +114,16 @@ namespace dijkstra
 
             node3.AddNeighbor(node1, 9);
             node3.AddNeighbor(node2, 10);
-            node3.AddNeighbor(node6,2);
+            node3.AddNeighbor(node6, 2);
             node3.AddNeighbor(node4, 11);
 
             node4.AddNeighbor(node2, 15);
             node4.AddNeighbor(node3, 11);
             node4.AddNeighbor(node5, 6);
 
-            node5.AddNeighbor(node4,  6);
+            node5.AddNeighbor(node4, 6);
             node5.AddNeighbor(node6, 9);
-            
+
             node6.AddNeighbor(node1, 14);
             node6.AddNeighbor(node3, 2);
             node6.AddNeighbor(node5, 9);
