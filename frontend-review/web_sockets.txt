@@ -1,0 +1,5 @@
+Provides full-duplex communication over a single TCP connection. Relatively
+new technology. The most concrete thing it enables is "push/pull" server
+communication. Instead of using an older method like long polling, the server
+can dynamically push messages to the client through an open TCP channel.
+SocketIO is a popular implementation. 

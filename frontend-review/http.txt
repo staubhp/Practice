@@ -1,0 +1,24 @@
+HTTP is Application layer protocol that has some standard verbs which are used
+for communication between two different machines.
+
+It's a request-response protocol, essentially half duplex communicaiton
+channel.
+
+Verbs:
+	-GET: Asks the server to return a resource
+	-PUT: Asks the server to accept a resource contained in the URI of the
+PUT request
+	-POST: Asks the server to accept a resource contained in the body of
+the POST request
+	-DELETE: Asks the server to delete a resource
+
+PUT vs POST: It's common to think that a POST is used to update a resource
+while PUT is used to create one. This isn't totally accurate though. The
+primary difference is that POST supports a request body whereas PUT does not.
+PUT is idempotent (its results will always be the same for the same request)
+where as POST is not. In general you can use both, or just implement one.
+PUT's idempotency is a nice feature. If you explicitly designate your
+resources then PUT makes sense, but if you let the server decide then use
+POST. In a nutshell: PUT is for creating when you know the URL of the thing
+you will create (e.g., PUT /report/12345) whereas POST is used if you know the
+URL of the factory (e.g., POST /report)

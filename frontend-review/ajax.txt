@@ -1,0 +1,8 @@
+Async Javascript and XML. Web apps using Ajax can send and receive data
+to/from the server asynchronously. 
+
+It's a combo of technologies. Javascript accesses the DOM and dynamically
+changes it. 
+
+Before Ajax, a web page would have to be totally reloaded to reflect new
+information.

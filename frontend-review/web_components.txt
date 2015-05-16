@@ -1,0 +1,20 @@
+Web Components: Reusable UI widgets made from open web technologies. Standard
+created by Google. The biggest thing here is it's a standardized way to
+encapsulate presentation details in an HTML document. Prior to this, styling
+elements that you only intended for a specific widget could spill over and
+effect the entire DOM.
+
+Consists of:
+	- Custom Elements
+	- HTML Templates
+	- Shadow DOM
+	- HTML Imports
+
+New Stuff:
+	- HTML elements: <template> <content> <shadow>
+	- API for registering elements: Document.registerElement()
+
+Shadow DOM:
+	- Encapsulates JS, CSS and templating for a web component.
+	- Separates the main DOM from the element's DOM
+	- element.createShadowRoot()

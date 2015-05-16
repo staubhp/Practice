@@ -1,0 +1,11 @@
+7) Application: HTTP, FTP, SMTP, DHCP, DNS
+6) Presentation: MIME
+5) Session: SOCKS, Named pipes, think sockets
+4) Transport: TCP, UDP
+3) Network: IP
+2) Data Link: ATM, ARP
+1) Physical: Cat5, USB, Bluetooth
+
+HTTP requests normally travel over TCP/IP. TCP ensures reliability while UDP
+doesn't. UDP more appropriate for things like video or sound that can suffer
+some data loss. 
