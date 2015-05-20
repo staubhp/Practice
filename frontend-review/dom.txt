@@ -1,0 +1,11 @@
+Domain Object Model - It's a convention for organizing and interacting with
+elements inside of an HTML document.
+
+Nodes are organized into a tree structure. Nodes in this tree can be
+manipulated by calling methods on those objects.
+
+Basic high level structure: Window>Document>Form
+
+Browsers have HTML engines whose purpose is to convert HTML into a DOM.
+
+

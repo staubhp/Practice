@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<!--
+    Flicker API:
+    https://api.flickr.com/services/rest/?&method=flickr.people.getPublicPhotos&api_key=b9588c6cb7c903465e84e4c62220b618&user_id=126509118@N03
+
+    If you need to convert to XML to JSON:
+    $.xml2json(data);
+
+
+    Image URL Format:
+    https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
+    ex: https://farm12.staticflickr.com/2443/1418878_1e92283336.jpg
+
+    -->
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.xml2json.js"></script>
+    <script type="text/javascript">
+    
+
+        (function (link) {
+            $.ajax({
+                type: 'GET',
+                url: 'https://api.flickr.com/services/rest/?&method=flickr.people.getPublicPhotos&api_key=b9588c6cb7c903465e84e4c62220b618&user_id=126509118@N03&extras=description',
+                dataType: 'XML',
+                success: function (data) {
+                    buildViewer(data);
+                }
+            });
+
+            var buildViewer = function (data) {
+                var flickrObject = $.xml2json(data);
+
+		debugger;
+		var superHero = {
+			name: flickrObject.photos.photo[0].title,
+			realName: flickrObject.photos.photo[0].description
+		}
+
+		loadSuperhero(superHero);
+
+                console.log(flickrObject)
+
+                
+            };
+
+        })();
+        
+      
+    </script>
+
+
+    <script>
+	function loadSuperhero(superHero){
+		$("#superheroName").html(superHero.name);
+		$("#superheroRealName").html(superHero.realName);
+	}	
+    </script>
+</head>
+<body>
+
+	<img src="#" id="superheroImage" />	
+	<div id="superheroName"> </div>
+	<div id="superheroRealName"> </div>
+
+</body>
+</html>

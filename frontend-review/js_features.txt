@@ -1,0 +1,45 @@
+Key features of Javascript:
+
+-Prototypical Inheritance
+Key difference between JS and class-based languages is its use of prototypical
+inheritance. Everything in JS is an object, there is no such thing as classes
+or typical class-based inheritance. Instead, all objects have a prototype, and
+these prototypes chain together all the way to the "root object" which is
+object.prototype. 
+
+So for example, if you reference foo.bar, but the foo object does not have a
+bar property, the JS interpreter will travel up to the prototype chain until
+it finds a bar property. If it does not find one, it will add a bar property
+to the foo object.
+
+This gets weirder when you consider this same behavior for primitives in
+AngularJS and its scopes. If the
+bar property was not an object but rather a primitive type (int, string, bool,
+etc) then the interpreter would immediately add the bar property to foo,
+shadowing any bar properties that exist in parent scopes. 
+
+-Duck Typed
+JS is a dynamically typed language, meaning it will implicitly convert types.
+This is in contrast to more strongly typed languages like C# where type
+checking is done at compile time and no implicit conversion will be performed. 
+
+-Interpreted
+Most JS engines are considered interpreters, meaning they will read a line of
+source code and immediately compile it to machine instructions. JIT compilers
+have blurred the lines between what can be considered a "compiled" verus
+"interpreted" language, so this isn't a terrible important designation. 
+
+-Sandboxed
+In practice, JS is always run in a "sandbox" environment, a portion of the
+operating system set apart from all other parts. This is a safety measure; in
+theory, JS should never be able to gain access to machine resources outside of
+its sandbox, otherwise computers would be even more susceptible to malicious
+scripts.
+
+-Functional
+JS supports a lot of functional programming paradigms right out of the box.
+This is because functions in JS are objects, just like everything else.
+That means they're first class (i.e., they can be passed as arguments to other
+functions). Other handy things: anonymous functions, immediately invoked
+funciton expressions, closures. 
+
