@@ -1,10 +1,10 @@
 //Generate all combinations of football scores that add up to 21
-//Possible football scores: 6,1,2,3
+//Possible football scores: 6,7,2,3
 
 var _scorePool = [6,7,2,3];
 var _scoreCombinations = [];
 
-function getScores(index, currentScore, currentCombination){
+function getScores(currentScore, currentCombination){
 	if (currentScore == 21){
 		_scoreCombinations.push(currentCombination);
 		console.log(currentCombination);
@@ -20,12 +20,12 @@ function getScores(index, currentScore, currentCombination){
 	}
 
 
-	for (var i = index; i<_scorePool.length; i++){
-		getScores(index, currentScore+_scorePool[i], currentCombination.concat(_scorePool[i]));
+	for (var i = 0; i<_scorePool.length; i++){
+		getScores(i, currentScore+_scorePool[i], currentCombination.concat(_scorePool[i]));
 	}
 }
 
 debugger;
-getScores(0, 0, []);
+getScores(0, []);
 
 
