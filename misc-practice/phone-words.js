@@ -14,18 +14,27 @@ var numberToChars={
 	9:['W','X','Y','Z']
 }
 
-var _input = "7516"; //PLAN, SLAM, etc
+var _input = "7526"; //PLAN, SLAM, etc
 
 function getPossibleWords(input){
 	var splinput = input.split('');
+	var charArrays = [];
 	for (var i = 0; i<splinput.length; i++){
-		var chars = numberToChars[splinput[i]];
-		buildPossibleWords(chars, "");
+		charArrays.push(numberToChars[splinput[i]]);
+	}
+	buildPossibleWords(charArrays, "", 0);
+}
 
+function buildPossibleWords(charArrays, currentWord, index){
+	if (index >= charArrays.length){
+		console.log(currentWord);
+		return;
+	}
+
+	for(var j = 0; j<charArrays[index].length; j++){
+		buildPossibleWords(charArrays, currentWord + charArrays[index][j], index+1);
 	}
 }
 
-function buildPossibleWords(chars, currentWord){
 
-}
-
+getPossibleWords(_input);
