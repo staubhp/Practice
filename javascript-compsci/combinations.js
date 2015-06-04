@@ -11,9 +11,9 @@ function getScores(currentScore, currentCombination){
 		return;
 	}
 
-	if (index == _scorePool.length){
-		return;
-	}
+//	if (index == _scorePool.length){
+//		return;
+//	}
 
 	if (currentScore > 21){
 		return;
@@ -21,7 +21,7 @@ function getScores(currentScore, currentCombination){
 
 
 	for (var i = 0; i<_scorePool.length; i++){
-		getScores(i, currentScore+_scorePool[i], currentCombination.concat(_scorePool[i]));
+		getScores(currentScore+_scorePool[i], currentCombination.concat(_scorePool[i]));
 	}
 }
 
