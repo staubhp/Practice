@@ -4,10 +4,15 @@
 var _scorePool = [6,7,2,3];
 var _scoreCombinations = [];
 
+
 function getScores(currentScore, currentCombination){
 	if (currentScore == 21){
-		_scoreCombinations.push(currentCombination);
-		console.log(currentCombination);
+		debugger;
+		var sorted = currentCombination.sort().toString();
+		if (_scoreCombinations.indexOf(sorted) < 0){
+			_scoreCombinations.push(sorted);
+			console.log(currentCombination);
+		}
 		return;
 	}
 
@@ -27,5 +32,6 @@ function getScores(currentScore, currentCombination){
 
 debugger;
 getScores(0, []);
+alert(_scoreCombinations.length + " combos found");
 
 
